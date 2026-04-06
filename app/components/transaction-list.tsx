@@ -2,12 +2,22 @@
 
 import { format } from "date-fns";
 import { BadgeDollarSign, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
-import { Transaction, WalletAccount, Category } from "@prisma/client";
+import { WalletAccount, Category } from "@prisma/client";
 import { ItemActions } from "@/app/components/item-actions";
 import { useTransactionFilter } from "@/lib/store";
 import { formatIDR } from "@/lib/utils";
 
-type Tx = Transaction & { account: WalletAccount; category: Category };
+type Tx = {
+  id: string;
+  amount: number;
+  type: "INCOME" | "EXPENSE";
+  date: Date;
+  note?: string | null;
+  account: WalletAccount & { balance: number };
+  category: Category;
+  debtId?: string | null;
+  savingsGoalId?: string | null;
+};
 
 export function TransactionList({ transactions }: { transactions: Tx[] }) {
   const view = useTransactionFilter((s) => s.view);

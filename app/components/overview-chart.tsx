@@ -1,10 +1,15 @@
 "use client";
 
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, Tooltip } from "recharts";
-import { Transaction } from "@prisma/client";
 import { format } from "date-fns";
 
-type Tx = Transaction & { category: { name: string; type: string } | null };
+type Tx = {
+  id: string;
+  amount: number;
+  type: "INCOME" | "EXPENSE";
+  date: Date;
+  category: { name: string; type: string } | null;
+};
 
 export function OverviewChart({ transactions }: { transactions: Tx[] }) {
   const grouped = transactions.reduce<Record<string, { income: number; expense: number }>>(
@@ -38,4 +43,3 @@ export function OverviewChart({ transactions }: { transactions: Tx[] }) {
     </div>
   );
 }
-
