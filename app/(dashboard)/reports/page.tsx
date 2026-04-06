@@ -61,7 +61,11 @@ export default async function ReportsPage() {
         <ReportRow label="Income" value={incomeVal} />
         <ReportRow label="Expense" value={expenseVal} />
         <ReportRow label="Profit / Loss" value={profit} highlight />
-        <ReportRow label="Transactions" value={txCount} prefix="" />
+        <ReportRow
+          label="Transactions"
+          value={txCount}
+          formatter={(v) => v.toLocaleString("id-ID")}
+        />
       </CardContent>
     </Card>
   );
@@ -71,10 +75,12 @@ function ReportRow({
   label,
   value,
   highlight = false,
+  formatter = formatIDR,
 }: {
   label: string;
   value: number;
   highlight?: boolean;
+  formatter?: (v: number) => string;
 }) {
   return (
     <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm">
@@ -84,7 +90,7 @@ function ReportRow({
           highlight ? (value >= 0 ? "text-emerald-600" : "text-rose-600") : "text-slate-900"
         }`}
       >
-        {formatIDR(value)}
+        {formatter(value)}
       </p>
     </div>
   );
