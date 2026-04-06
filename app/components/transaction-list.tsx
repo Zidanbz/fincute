@@ -2,7 +2,6 @@
 
 import { format } from "date-fns";
 import { BadgeDollarSign, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
-import { WalletAccount, Category } from "@prisma/client";
 import { ItemActions } from "@/app/components/item-actions";
 import { useTransactionFilter } from "@/lib/store";
 import { formatIDR } from "@/lib/utils";
@@ -13,8 +12,17 @@ type Tx = {
   type: "INCOME" | "EXPENSE";
   date: Date;
   note?: string | null;
-  account: WalletAccount & { balance: number };
-  category: Category;
+  account: {
+    id: string;
+    name: string;
+    type: "CASH" | "BANK" | "EWALLET";
+    balance: number;
+  };
+  category: {
+    id: string;
+    name: string;
+    type: "INCOME" | "EXPENSE";
+  };
   debtId?: string | null;
   savingsGoalId?: string | null;
 };
