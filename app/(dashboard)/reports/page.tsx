@@ -76,11 +76,13 @@ function ReportRow({
   value,
   highlight = false,
   formatter = formatIDR,
+  prefix = "",
 }: {
   label: string;
   value: number;
   highlight?: boolean;
   formatter?: (v: number) => string;
+  prefix?: string;
 }) {
   return (
     <div className="flex items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm">
@@ -90,6 +92,7 @@ function ReportRow({
           highlight ? (value >= 0 ? "text-emerald-600" : "text-rose-600") : "text-slate-900"
         }`}
       >
+        {prefix}
         {formatter(value)}
       </p>
     </div>
