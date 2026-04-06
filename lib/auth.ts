@@ -1,6 +1,6 @@
 import { compare, hash } from "bcryptjs";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { NextAuthConfig } from "next-auth";
+import type { AuthConfig } from "@auth/core";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
@@ -33,15 +33,17 @@ const providers = [
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null;
+        const email = credentials?.email as string | undefined;
+        const password = credentials?.password as string | undefined;
+        if (!email || !password) return null;
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email },
         });
         if (!user?.passwordHash) {
           console.warn("Credentials auth: user not found or no passwordHash", credentials.email);
           return null;
         }
-        const isValid = await compare(credentials.password, user.passwordHash);
+        const isValid = await compare(password, user.passwordHash);
         if (!isValid) {
           console.warn("Credentials auth: invalid password for", credentials.email);
           return null;
@@ -51,7 +53,7 @@ const providers = [
     }),
   ];
 
-export const authConfig: NextAuthConfig = {
+export const authConfig: AuthConfig = {
   adapter,
   providers,
   pages: {

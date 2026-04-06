@@ -19,7 +19,16 @@ export function AddTransactionForm({
   savingsGoals?: Option[];
   debts?: Option[];
 }) {
-  const [state, setState] = useState(() => ({
+  const [state, setState] = useState<{
+    amount: number | "";
+    date: string;
+    type: "EXPENSE" | "INCOME";
+    accountId: string;
+    categoryId: string;
+    savingsGoalId: string;
+    debtId: string;
+    note: string;
+  }>(() => ({
     amount: "",
     date: new Date().toISOString().slice(0, 10),
     type: "EXPENSE",
@@ -105,7 +114,7 @@ export function AddTransactionForm({
               "h-11 w-full rounded-2xl border border-slate-200 bg-white px-3 text-sm"
             )}
             value={state.type}
-            onChange={(e) => setState({ ...state, type: e.target.value })}
+            onChange={(e) => setState({ ...state, type: e.target.value as "EXPENSE" | "INCOME" })}
           >
             <option value="EXPENSE">Expense</option>
             <option value="INCOME">Income</option>
