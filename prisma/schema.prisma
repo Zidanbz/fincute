@@ -41,12 +41,12 @@ model User {
   debts         Debt[]
   invoices      Invoice[]
 
-  authAccounts  Account[]
+  authAccounts  AuthAccount[]
   sessions      Session[]
 }
 
-// NextAuth models (prefixed to avoid conflict with finance Account)
-model Account {
+// NextAuth model
+model AuthAccount {
   id                String   @id @default(cuid())
   userId            String
   type              String
@@ -63,6 +63,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("AuthAccount")
 }
 
 model Session {
@@ -93,6 +94,8 @@ model WalletAccount {
 
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
+
+  @@map("Account")
 }
 
 model Category {

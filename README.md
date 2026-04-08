@@ -29,8 +29,27 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy on Vercel (tested Apr 2026)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1) Pastikan build lokal lulus  
+   ```bash
+   npm run build
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2) Set Environment Variables di Vercel (Project Settings → Environment Variables):  
+   - `DATABASE_URL` → koneksi PostgreSQL production (Neon/Supabase/RDS).  
+   - `NEXTAUTH_SECRET` → string acak panjang (gunakan `openssl rand -hex 32`).  
+   - `NEXTAUTH_URL` → `https://<project>.vercel.app` (atau custom domain).  
+   - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` → wajib jika login Google dipakai.  
+   - `EMAIL_SERVER`, `EMAIL_FROM` → isi hanya jika login email (SMTP) dipakai.  
+   - Jangan pakai nilai lokal (localhost) untuk production.
+
+3) Hubungkan repo dan pilih branch (mis. `main`). Klik **Redeploy** dengan opsi **Clear build cache** setelah mengubah env.
+
+4) Setelah deploy, tes login di domain Vercel. Jika credential login gagal, cek:  
+   - Database sudah terisi user/password (seed).  
+   - `NEXTAUTH_URL` sesuai domain production.  
+   - SECRET sama di server & build.  
+   - Provider (Google/Email) memiliki callback URL: `https://<project>.vercel.app/api/auth/callback/<provider>`.
+
+Referensi resmi: https://nextjs.org/docs/app/building-your-application/deploying dan https://authjs.dev.
